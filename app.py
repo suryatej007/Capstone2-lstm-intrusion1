@@ -1,14 +1,20 @@
+import streamlit as st  
+from utils import preprocess_input, predict_intrusion  
 
-import streamlit as st
-from utils import preprocess_input, predict_intrusion
+st.set_page_config(page_title="Intrusion Detection", layout="centered")  
+st.title("Cloud Intrusion Detection using LSTM")  
+st.write("Enter 10 features to analyze traffic behavior:")
 
-st.title("LSTM Intrusion Detection System")
-user_input = st.text_input("Enter comma-separated input values:")
-if user_input:
-    try:
-        user_input = list(map(float, user_input.split(",")))
-        preprocessed = preprocess_input(user_input)
-        prediction = predict_intrusion(preprocessed)
-        st.write("Prediction:", prediction)
-    except Exception as e:
-        st.error(f"Invalid input: {e}")
+input_values = []  
+for i in range(10):  
+    val = st.number_input(f"Feature {i+1}", value=0.0, step=0.1)  
+    input_values.append(val)  
+
+if st.button("Predict"):  
+    processed = preprocess_input(input_values)  
+    score = predict_intrusion(processed)  
+
+    if score >= 0.5:  
+        st.error(f"Intrusion Detected! (score: {score:.2f})")  
+    else:  
+        st.success(f"Normal Traffic (score: {score:.2f})")
