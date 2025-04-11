@@ -1,4 +1,3 @@
-
 import joblib
 import numpy as np
 from tensorflow.keras.models import load_model
@@ -16,3 +15,4 @@ def preprocess_input(user_input):
 def predict_intrusion(input_data):
     prediction = model.predict(input_data)[0][0]
     return prediction
+    
